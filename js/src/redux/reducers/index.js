@@ -16,6 +16,8 @@ import snippetEditor from "./snippetEditor";
 import twitterEditor from "./twitterEditor";
 import warning from "./warning";
 import schemaTab from "./schemaTab";
+import SEMrushModal from "./SEMrushModal";
+import SEMrushRequest from "./SEMrushRequest";
 
 export default {
 	analysis,
@@ -36,4 +38,6 @@ export default {
 	twitterEditor,
 	warning,
 	schemaTab,
+	SEMrushModal,
+	SEMrushRequest,
 };
