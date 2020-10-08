@@ -11,6 +11,7 @@ import marksButtonStatus from "./markerButtons";
 import isMarkerPaused from "./markerPauseStatus";
 import preferences from "./preferences";
 import primaryTaxonomies from "./primaryTaxonomies";
+import searchMetadata from "./searchMetadata";
 import settings from "./settings";
 import snippetEditor from "./snippetEditor";
 import twitterEditor from "./twitterEditor";
@@ -33,6 +34,7 @@ export default {
 	isMarkerPaused,
 	preferences,
 	primaryTaxonomies,
+	searchMetadata,
 	settings,
 	snippetEditor,
 	twitterEditor,
