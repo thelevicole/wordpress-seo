@@ -1,4 +1,5 @@
-/* global jQuery, elementor, $e, elementorFrontend */
+/* global jQuery */
+import domReady from "@wordpress/dom-ready";
 import { registerReactComponent } from "../helpers/reactRoot";
 import YoastView from "../elementor/YoastView";
 import { get } from "lodash";
@@ -25,12 +26,12 @@ const addYoastRegion = ( regions ) => {
  * @returns {void}
  */
 const activateSaveButton = () => {
-	const footerSaver = get( elementor, "saver.footerSaver", false );
+	const footerSaver = get( window.elementor, "saver.footerSaver", false );
 	if ( false !== footerSaver ) {
 		footerSaver.activateSaveButtons( document, true );
 		return;
 	}
-	elementor.channels.editor.trigger( "status:change", true );
+	window.elementor.channels.editor.trigger( "status:change", true );
 };
 
 /**
@@ -58,25 +59,36 @@ const detectChange = input => {
 	}
 };
 
+const sendFormData = ( form ) => {
+	const data = jQuery( form ).serializeArray().reduce( ( result, { name, value } ) => {
+		result[ name ] = value;
+
+		return result;
+	}, {} );
+	jQuery.post( form.getAttribute( "action" ), data );
+};
+
 /**
  * Initializes the Yoast elementor editor integration.
  *
- * @param {Object} store The Yoast editor store.
- *
  * @returns {void}
  */
-export default function initElementEditorIntegration( store ) {
+export default function initElementEditorIntegration() {
 	// Expose registerReactComponent as an alternative to registerPlugin.
 	window.YoastSEO = window.YoastSEO || {};
 	window.YoastSEO._registerReactComponent = registerReactComponent;
 
-	jQuery( function() {
-		elementor.once( "preview:loaded", () => {
+	domReady( () => {
+		window.elementor.once( "preview:loaded", () => {
 			// Connects the tab to the panel.
-			$e.components
+			window.$e.components
 				.get( "panel/elements" )
 				.addTab( "yoast", { title: "Yoast SEO" } );
 		} );
+
+		// Hook into the save.
+		const handleSave = sendFormData.bind( document.getElementById( "yoast-form" ) );
+		window.elementor.saver.on( "before:save", handleSave );
 	} );
 
 	jQuery( window ).on( "elementor:init", () => {
@@ -87,7 +99,7 @@ export default function initElementEditorIntegration( store ) {
 			"$1<div class=\"elementor-component-tab elementor-panel-navigation-tab elementor-active\" data-tab=\"yoast\">Yoast SEO</div>",
 		);
 
-		elementor.hooks.addFilter(
+		window.elementor.hooks.addFilter(
 			"panel/elements/regionViews",
 			addYoastRegion,
 		);
