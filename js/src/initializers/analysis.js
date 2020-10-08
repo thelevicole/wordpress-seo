@@ -40,10 +40,10 @@ const collectAnalysisData = ( customAnalysisData, pluggable ) => {
 		 * description on change only. Therefore, we have to use the original data when the analysis data isn't
 		 * available. This data is transformed by the replacevar plugin via pluggable.
 		 */
-		description: storeData.analysisData.snippet.description || storeData.snippetEditor.data.description,
-		title: storeData.analysisData.snippet.title || storeData.snippetEditor.data.title,
-		url: storeData.snippetEditor.data.slug,
-		permalink: storeData.settings.snippetEditor.baseUrl + storeData.snippetEditor.data.slug,
+		// description: storeData.analysisData.snippet.description || storeData.snippetEditor.data.description,
+		// title: storeData.analysisData.snippet.title || storeData.snippetEditor.data.title,
+		// url: storeData.snippetEditor.data.slug,
+		// permalink: storeData.settings.snippetEditor.baseUrl + storeData.snippetEditor.data.slug,
 	};
 
 	merge( data, customAnalysisData.getData() );
@@ -124,6 +124,21 @@ const initAnalysis = () => {
 	window.YoastSEO = window.YoastSEO || {};
 
 	window.YoastSEO.app = {};
+
+	// Initialize the pluggable in non-loaded form.
+	window.YoastSEO.app.pluggable = {
+		loaded: false,
+	};
+
+	window.YoastSEO.analysis = {};
+	window.YoastSEO.analysis.worker = createAnalysisWorker();
+	window.YoastSEO.analysis.applyMarks = ( paper, marks ) => getApplyMarks()( paper, marks );
+	window.YoastSEO.app.refresh = debounce( () => refreshAnalysis(
+		window.YoastSEO.analysis.worker,
+		collectAnalysisData.bind( null, customAnalysisData, window.YoastSEO.app.pluggable ),
+		window.YoastSEO.analysis.applyMarks,
+	), refreshDelay );
+
 	window.YoastSEO.app.registerCustomDataCallback = customAnalysisData.register;
 	window.YoastSEO.app.pluggable = new Pluggable( window.YoastSEO.app.refresh );
 	window.YoastSEO.app.registerPlugin = window.YoastSEO.app.pluggable._registerPlugin;
@@ -134,16 +149,6 @@ const initAnalysis = () => {
 		window.YoastSEO.analysis.worker.initialize( assessorOptions ).catch( handleWorkerError );
 		window.YoastSEO.app.refresh();
 	};
-
-	window.YoastSEO.analysis = {};
-	window.YoastSEO.analysis.worker = createAnalysisWorker();
-	window.YoastSEO.analysis.applyMarks = ( paper, marks ) => getApplyMarks()( paper, marks );
-	window.YoastSEO.app.refresh = debounce( () => refreshAnalysis(
-		window.YoastSEO.analysis.worker,
-		collectAnalysisData.bind( customAnalysisData, window.YoastSEO.app.pluggable ),
-		window.YoastSEO.analysis.applyMarks,
-	), refreshDelay );
-
 };
 
 export default initAnalysis;

@@ -35,9 +35,6 @@ domReady( () => {
 // Initialize the editor integration.
 initElementorEditorIntegration();
 
-
-
-
 // STORE INIT
 // Register our store to WP data.
 // Added:

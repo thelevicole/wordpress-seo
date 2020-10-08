@@ -215,50 +215,51 @@ export default function initPostScraper( $, store, editorData ) {
 	 */
 	function initializePostAnalysis() {
 		const appArgs = getAppArgs( store );
-		app = new App( appArgs );
+		// app = new App( appArgs );
+		const app = window.YoastSEO.app;
 
-		// Content analysis
-		window.YoastSEO = window.YoastSEO || {};
-		window.YoastSEO.app = app;
-		window.YoastSEO.store = store;
-		window.YoastSEO.analysis = {};
-		window.YoastSEO.analysis.worker = createAnalysisWorker();
-		window.YoastSEO.analysis.collectData = () => collectAnalysisData(
-			editorData,
-			store,
-			customAnalysisData,
-			app.pluggable,
-			select( "core/block-editor" )
-		);
-		window.YoastSEO.analysis.applyMarks = ( paper, marks ) => getApplyMarks( store )( paper, marks );
+		// // Content analysis
+		// window.YoastSEO = window.YoastSEO || {};
+		// window.YoastSEO.app = app;
+		// window.YoastSEO.store = store;
+		// window.YoastSEO.analysis = {};
+		// window.YoastSEO.analysis.worker = createAnalysisWorker();
+		// window.YoastSEO.analysis.collectData = () => collectAnalysisData(
+		// 	editorData,
+		// 	store,
+		// 	customAnalysisData,
+		// 	app.pluggable,
+		// 	select( "core/block-editor" )
+		// );
+		// window.YoastSEO.analysis.applyMarks = ( paper, marks ) => getApplyMarks( store )( paper, marks );
 
-		// YoastSEO.app overwrites.
-		window.YoastSEO.app.refresh = debounce( () => refreshAnalysis(
-			window.YoastSEO.analysis.worker,
-			window.YoastSEO.analysis.collectData,
-			window.YoastSEO.analysis.applyMarks,
-			store,
-			editorData,
-		), refreshDelay );
-		window.YoastSEO.app.registerCustomDataCallback = customAnalysisData.register;
-		window.YoastSEO.app.pluggable = new Pluggable( window.YoastSEO.app.refresh );
-		window.YoastSEO.app.registerPlugin = window.YoastSEO.app.pluggable._registerPlugin;
-		window.YoastSEO.app.pluginReady = window.YoastSEO.app.pluggable._ready;
-		window.YoastSEO.app.pluginReloaded = window.YoastSEO.app.pluggable._reloaded;
-		window.YoastSEO.app.registerModification = window.YoastSEO.app.pluggable._registerModification;
-		window.YoastSEO.app.registerAssessment = ( name, assessment, pluginName ) => {
-			if ( ! isUndefined( app.seoAssessor ) ) {
-				return window.YoastSEO.app.pluggable._registerAssessment( app.defaultSeoAssessor, name, assessment, pluginName ) &&
-					window.YoastSEO.app.pluggable._registerAssessment( app.cornerStoneSeoAssessor, name, assessment, pluginName );
-			}
-		};
-		window.YoastSEO.app.changeAssessorOptions = function( assessorOptions ) {
-			window.YoastSEO.analysis.worker.initialize( assessorOptions ).catch( handleWorkerError );
-			window.YoastSEO.app.refresh();
-		};
+		// // YoastSEO.app overwrites.
+		// window.YoastSEO.app.refresh = debounce( () => refreshAnalysis(
+		// 	window.YoastSEO.analysis.worker,
+		// 	window.YoastSEO.analysis.collectData,
+		// 	window.YoastSEO.analysis.applyMarks,
+		// 	store,
+		// 	editorData,
+		// ), refreshDelay );
+		// window.YoastSEO.app.registerCustomDataCallback = customAnalysisData.register;
+		// window.YoastSEO.app.pluggable = new Pluggable( window.YoastSEO.app.refresh );
+		// window.YoastSEO.app.registerPlugin = window.YoastSEO.app.pluggable._registerPlugin;
+		// window.YoastSEO.app.pluginReady = window.YoastSEO.app.pluggable._ready;
+		// window.YoastSEO.app.pluginReloaded = window.YoastSEO.app.pluggable._reloaded;
+		// window.YoastSEO.app.registerModification = window.YoastSEO.app.pluggable._registerModification;
+		// window.YoastSEO.app.registerAssessment = ( name, assessment, pluginName ) => {
+		// 	if ( ! isUndefined( app.seoAssessor ) ) {
+		// 		return window.YoastSEO.app.pluggable._registerAssessment( app.defaultSeoAssessor, name, assessment, pluginName ) &&
+		// 			window.YoastSEO.app.pluggable._registerAssessment( app.cornerStoneSeoAssessor, name, assessment, pluginName );
+		// 	}
+		// };
+		// window.YoastSEO.app.changeAssessorOptions = function( assessorOptions ) {
+		// 	window.YoastSEO.analysis.worker.initialize( assessorOptions ).catch( handleWorkerError );
+		// 	window.YoastSEO.app.refresh();
+		// };
 
-		initializeUsedKeywords( app.refresh, "get_focus_keyword_usage", store );
-		store.subscribe( handleStoreChange.bind( null, store, app.refresh ) );
+		initializeUsedKeywords( window.YoastSEO.app.refresh, "get_focus_keyword_usage", store );
+		store.subscribe( handleStoreChange.bind( null, store, window.YoastSEO.app.refresh ) );
 
 		// Backwards compatibility.
 		window.YoastSEO.analyzerArgs = appArgs;
@@ -288,17 +289,17 @@ export default function initPostScraper( $, store, editorData ) {
 			.catch( handleWorkerError );
 
 		// Hack needed to make sure Publish box and traffic light are still updated.
-		disableYoastSEORenderers( app );
-		const originalInitAssessorPresenters = app.initAssessorPresenters.bind( app );
-		app.initAssessorPresenters = function() {
-			originalInitAssessorPresenters();
-			disableYoastSEORenderers( app );
-		};
+		// disableYoastSEORenderers( app );
+		// const originalInitAssessorPresenters = app.initAssessorPresenters.bind( app );
+		// app.initAssessorPresenters = function() {
+		// 	originalInitAssessorPresenters();
+		// 	disableYoastSEORenderers( app );
+		// };
 
-		// Set refresh function. data.setRefresh is only defined when Gutenberg is available.
-		if ( editorData.setRefresh ) {
-			editorData.setRefresh( app.refresh );
-		}
+		// // Set refresh function. data.setRefresh is only defined when Gutenberg is available.
+		// if ( editorData.setRefresh ) {
+		// 	editorData.setRefresh( app.refresh );
+		// }
 
 		// Initialize the snippet editor data.
 		let snippetEditorData = snippetEditorHelpers.getDataFromCollector( editorData );
@@ -313,9 +314,9 @@ export default function initPostScraper( $, store, editorData ) {
 		// Save the keyword, in order to compare it to store changes.
 		let focusKeyword = store.getState().focusKeyword;
 		requestWordsToHighlight( window.YoastSEO.analysis.worker.runResearch, store, focusKeyword );
-		const refreshAfterFocusKeywordChange = debounce( () => {
-			app.refresh();
-		}, 50 );
+		// const refreshAfterFocusKeywordChange = debounce( () => {
+		// 	app.refresh();
+		// }, 50 );
 
 		let previousCornerstoneValue = null;
 		store.subscribe( () => {
@@ -327,7 +328,7 @@ export default function initPostScraper( $, store, editorData ) {
 				requestWordsToHighlight( window.YoastSEO.analysis.worker.runResearch, store, focusKeyword );
 
 				$( "#yoast_wpseo_focuskw" ).val( focusKeyword );
-				refreshAfterFocusKeywordChange();
+				// refreshAfterFocusKeywordChange();
 			}
 
 			const data = snippetEditorHelpers.getDataFromStore( store );
