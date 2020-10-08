@@ -4,6 +4,8 @@ let editorData = {
 	content: "",
 	title: "",
 	excerpt: "",
+	slug: "",
+	featuredImage: {},
 };
 
 /**
@@ -53,7 +55,9 @@ function getEditorData() {
 	return {
 		content: getContent(),
 		title: window.elementor.settings.page.model.get( "post_title" ),
-		excerpt: window.elementor.settings.page.model.get( "post_excerpt" ),
+		excerpt: window.elementor.settings.page.model.get( "post_excerpt" ) || "",
+		slug: window.wpseoScriptData.metabox.slug,
+		featuredImage: window.elementor.settings.page.model.get( "post_featured_image" ),
 	};
 }
 
@@ -80,17 +84,15 @@ function handleEditorChange() {
  * @returns {void}
  */
 export default function initialize() {
-	// This function relies on `window.elementor`. This should be available after the content is loaded.
-	document.addEventListener( "DOMContentLoaded", () => {
-		// Initialize Elementor data one time after the preview is available.
-		window.elementor.once( "preview:loaded", () => {
-			window.elementorFrontend.hooks.addAction( "frontend/element_ready/global", () => {
-				handleEditorChange();
-				window.elementorFrontend.hooks.removeAction( "frontend/element_ready/global" );
-			} );
+	// Initialize Elementor data one time after the preview is available.
+	window.elementor.once( "preview:loaded", () => {
+		window.elementorFrontend.hooks.addAction( "frontend/element_ready/global", () => {
+			handleEditorChange();
+			// Only needed 1 time.
+			window.elementorFrontend.hooks.removeAction( "frontend/element_ready/global" );
 		} );
-
-		// Subscribe to Elementor change.
-		window.elementor.channels.editor.on( "status:change", handleEditorChange );
 	} );
+
+	// Subscribe to Elementor changes.
+	window.elementor.channels.editor.on( "status:change", handleEditorChange );
 }
