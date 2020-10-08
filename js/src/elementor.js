@@ -5,6 +5,7 @@ import initElementorEditorIntegration from "./initializers/elementor-editor-inte
 import initEditorStore from "./initializers/editor-store";
 import initScraper from "./initializers/elementor-scraper";
 import initAdminMedia from "./initializers/admin-media";
+import initL10n from "./initializers/l10n";
 import initElementorData from "./watchers/editorData/elementor";
 
 domReady( () => {
@@ -20,6 +21,7 @@ domReady( () => {
 	editorData.initialize( window.wpseoScriptData.analysis.plugins.replaceVars.replace_vars );
 	window.editorData = editorData;
 
+	initL10n();
 	// Initialize the scraper.
 	initScraper( jQuery, store, editorData );
 
