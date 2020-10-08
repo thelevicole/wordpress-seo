@@ -22,7 +22,7 @@ import Pluggable from "../lib/Pluggable";
  * @param {CustomAnalysisData} customAnalysisData The custom analysis data.
  * @param {Pluggable}          pluggable          The Pluggable.
  *
- * @returns {Paper} The paper data used for the analyses.
+ * @returns {Object} The analyses data in non-Paper form.
  */
 const collectAnalysisData = ( customAnalysisData, pluggable ) => {
 	const {
@@ -40,10 +40,10 @@ const collectAnalysisData = ( customAnalysisData, pluggable ) => {
 		 * description on change only. Therefore, we have to use the original data when the analysis data isn't
 		 * available. This data is transformed by the replacevar plugin via pluggable.
 		 */
-		// description: storeData.analysisData.snippet.description || storeData.snippetEditor.data.description,
-		// title: storeData.analysisData.snippet.title || storeData.snippetEditor.data.title,
-		// url: storeData.snippetEditor.data.slug,
-		// permalink: storeData.settings.snippetEditor.baseUrl + storeData.snippetEditor.data.slug,
+		description: storeData.analysisData.snippet.description || storeData.snippetEditor.data.description,
+		title: storeData.analysisData.snippet.title || storeData.snippetEditor.data.title,
+		url: storeData.snippetEditor.data.slug,
+		permalink: storeData.settings.snippetEditor.baseUrl + storeData.snippetEditor.data.slug,
 	};
 
 	merge( data, customAnalysisData.getData() );
@@ -59,8 +59,8 @@ const collectAnalysisData = ( customAnalysisData, pluggable ) => {
 	data.titleWidth = measureTextWidth( data.title );
 	data.locale = getContentLocale();
 
-	return Paper.parse( data );
-}
+	return data;
+};
 
 /**
  * Refreshes the analysis.
@@ -72,7 +72,7 @@ const collectAnalysisData = ( customAnalysisData, pluggable ) => {
  * @returns {void}
  */
 const refreshAnalysis = ( worker, collectData, applyMarks ) => {
-	const paper = collectData();
+	const paper = Paper.parse( collectData() );
 	const dispatch = wpDispatch( "yoast-seo/editor" );
 
 	worker.analyze( paper )
@@ -122,7 +122,6 @@ const initAnalysis = () => {
 	const customAnalysisData = new CustomAnalysisData();
 
 	window.YoastSEO = window.YoastSEO || {};
-
 	window.YoastSEO.app = {};
 
 	// Initialize the pluggable in non-loaded form.
@@ -133,9 +132,10 @@ const initAnalysis = () => {
 	window.YoastSEO.analysis = {};
 	window.YoastSEO.analysis.worker = createAnalysisWorker();
 	window.YoastSEO.analysis.applyMarks = ( paper, marks ) => getApplyMarks()( paper, marks );
+	window.YoastSEO.analysis.collectData = collectAnalysisData.bind( null, customAnalysisData, window.YoastSEO.app.pluggable );
 	window.YoastSEO.app.refresh = debounce( () => refreshAnalysis(
 		window.YoastSEO.analysis.worker,
-		collectAnalysisData.bind( null, customAnalysisData, window.YoastSEO.app.pluggable ),
+		window.YoastSEO.analysis.collectData,
 		window.YoastSEO.analysis.applyMarks,
 	), refreshDelay );
 

@@ -5,13 +5,15 @@ import initAnalysis from "./initializers/analysis";
 import initElementorEditorIntegration from "./initializers/elementor-editor-integration";
 import initEditorStore from "./initializers/editor-store";
 import initScraper from "./initializers/elementor-scraper";
+import initReplaceVarsPlugin from "./initializers/replace-vars-plugin";
 import initAdminMedia from "./initializers/admin-media";
 import initL10n from "./initializers/l10n";
 import initElementorData from "./watchers/editorData/elementor";
 
 domReady( () => {
-	// Initialize the editor store.
+	// Initialize the editor store and set it on the window.
 	const store = initEditorStore();
+	window.YoastSEO.store = store;
 
 	// Initialize the editor data watcher.
 	initElementorData();
@@ -24,6 +26,7 @@ domReady( () => {
 
 	initL10n();
 	initAnalysis();
+	initReplaceVarsPlugin();
 
 	// Initialize the scraper.
 	initScraper( jQuery, store, editorData );

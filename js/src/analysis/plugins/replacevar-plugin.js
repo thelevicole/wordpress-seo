@@ -36,11 +36,13 @@ var taxonomyElements = {};
  *
  * @returns {void}
  */
-var YoastReplaceVarPlugin = function( app, store ) {
-	this._app = app;
-	this._app.registerPlugin( "replaceVariablePlugin", { status: "ready" } );
+var YoastReplaceVarPlugin = function( { store, registerPlugin, registerModification, rawData, pluginReloaded } ) {
+	registerPlugin( "replaceVariablePlugin", { status: "ready" } );
 
 	this._store = store;
+	this._registerModification = registerModification;
+	this._rawData = rawData;
+	this._pluginReloaded = pluginReloaded;
 
 	this.replaceVariables = this.replaceVariables.bind( this );
 
@@ -213,7 +215,7 @@ YoastReplaceVarPlugin.prototype.registerModifications = function() {
 	var callback = this.replaceVariables.bind( this );
 
 	forEach( modifiableFields, function( field ) {
-		this._app.registerModification( field, callback, "replaceVariablePlugin", 10 );
+		this._registerModification( field, callback, "replaceVariablePlugin", 10 );
 	}.bind( this ) );
 };
 
@@ -263,7 +265,7 @@ YoastReplaceVarPlugin.prototype.replaceByStore = function( data ) {
  */
 YoastReplaceVarPlugin.prototype.getReplacementSource = function( placeholderOptions ) {
 	if ( placeholderOptions.source === "app" ) {
-		return this._app.rawData;
+		return this._rawData;
 	}
 
 	if ( placeholderOptions.source === "direct" ) {
@@ -315,7 +317,7 @@ YoastReplaceVarPlugin.prototype.replacePlaceholders = function( text ) {
  * @returns {void}
  */
 YoastReplaceVarPlugin.prototype.declareReloaded = function() {
-	this._app.pluginReloaded( "replaceVariablePlugin" );
+	this._pluginReloaded( "replaceVariablePlugin" );
 	this._store.dispatch( refreshSnippetEditor() );
 };
 

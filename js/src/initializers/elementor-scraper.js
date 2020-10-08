@@ -219,9 +219,9 @@ export default function initPostScraper( $, store, editorData ) {
 		const app = window.YoastSEO.app;
 
 		// // Content analysis
-		// window.YoastSEO = window.YoastSEO || {};
+		window.YoastSEO = window.YoastSEO || {};
 		// window.YoastSEO.app = app;
-		// window.YoastSEO.store = store;
+		window.YoastSEO.store = store;
 		// window.YoastSEO.analysis = {};
 		// window.YoastSEO.analysis.worker = createAnalysisWorker();
 		// window.YoastSEO.analysis.collectData = () => collectAnalysisData(
@@ -266,7 +266,13 @@ export default function initPostScraper( $, store, editorData ) {
 
 		// Analysis plugins
 		window.YoastSEO.wp = {};
-		window.YoastSEO.wp.replaceVarsPlugin = new YoastReplaceVarPlugin( app, store );
+		// window.YoastSEO.wp.replaceVarsPlugin = new YoastReplaceVarPlugin( {
+		// 	store,
+		// 	registerPlugin: window.YoastSEO.app.registerPlugin,
+		// 	registerModification: window.YoastSEO.app.registerModification,
+		// 	rawData: window.YoastSEO.app.rawData,
+		// 	pluginReloaded: window.YoastSEO.app.pluginReloaded,
+		// } );
 //		window.YoastSEO.wp.shortcodePlugin = new YoastShortcodePlugin( {
 //			registerPlugin: app.registerPlugin,
 //			registerModification: app.registerModification,

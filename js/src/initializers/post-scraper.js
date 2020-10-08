@@ -61,6 +61,7 @@ setWordPressSeoL10n();
 window.YoastReplaceVarPlugin = YoastReplaceVarPlugin;
 window.YoastShortcodePlugin = YoastShortcodePlugin;
 
+/* eslint-disable max-statements */
 /**
  * @summary Initializes the post scraper script.
  *
@@ -462,7 +463,13 @@ export default function initPostScraper( $, store, editorData ) {
 
 		// Analysis plugins
 		window.YoastSEO.wp = {};
-		window.YoastSEO.wp.replaceVarsPlugin = new YoastReplaceVarPlugin( app, store );
+		window.YoastSEO.wp.replaceVarsPlugin = new YoastReplaceVarPlugin( {
+			store,
+			registerPlugin: window.YoastSEO.app.registerPlugin,
+			registerModification: window.YoastSEO.app.registerModification,
+			rawData: window.YoastSEO.app.rawData,
+			pluginReloaded: window.YoastSEO.app.pluginReloaded,
+		} );
 		window.YoastSEO.wp.shortcodePlugin = new YoastShortcodePlugin( {
 			registerPlugin: app.registerPlugin,
 			registerModification: app.registerModification,

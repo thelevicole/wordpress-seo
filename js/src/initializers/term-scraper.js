@@ -353,7 +353,13 @@ export default function initTermScraper( $, store, editorData ) {
 
 		// Init Plugins.
 		window.YoastSEO.wp = {};
-		window.YoastSEO.wp.replaceVarsPlugin = new YoastReplaceVarPlugin( app, store );
+		window.YoastSEO.wp.replaceVarsPlugin = new YoastReplaceVarPlugin( {
+			store,
+			registerPlugin: window.YoastSEO.app.registerPlugin,
+			registerModification: window.YoastSEO.app.registerModification,
+			rawData: window.YoastSEO.app.rawData,
+			pluginReloaded: window.YoastSEO.app.pluginReloaded,
+		} );
 
 		// For backwards compatibility.
 		window.YoastSEO.analyzerArgs = args;
