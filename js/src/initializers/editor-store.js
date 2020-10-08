@@ -4,8 +4,8 @@ import reducers from "../redux/reducers";
 import * as selectors from "../redux/selectors";
 import * as actions from "../redux/actions";
 import { setSettings } from "../redux/actions/settings";
-import { setSEMrushChangeCountry } from "../redux/actions";
-import { setSEMrushLoginStatus } from "../redux/actions";
+import { loadSearchMetadata, setSEMrushChangeCountry, setSEMrushLoginStatus } from "../redux/actions";
+import * as contentAnalysisActions from "yoast-components/composites/Plugin/ContentAnalysis/actions/contentAnalysis";
 
 /**
  * Initializes the Yoast SEO editor store.
@@ -16,7 +16,10 @@ export default function initEditorStore() {
 	const store = registerStore( "yoast-seo/editor", {
 		reducer: combineReducers( reducers ),
 		selectors,
-		actions: pickBy( actions, x => typeof x === "function" ),
+		actions: pickBy( {
+			...contentAnalysisActions,
+			...actions,
+		}, x => typeof x === "function" ),
 	} );
 
 	store.dispatch(
@@ -42,6 +45,7 @@ export default function initEditorStore() {
 	store.dispatch(
 		setSEMrushLoginStatus( window.wpseoScriptData.metabox.SEMrushLoginStatus )
 	);
+	store.dispatch( loadSearchMetadata() );
 
 	return store;
 }
