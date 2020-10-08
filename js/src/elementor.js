@@ -36,11 +36,7 @@ domReady( () => {
 initElementorEditorIntegration();
 
 
-// Initialize the scraper.
-initScraper( jQuery, store, editorData );
 
-// Initialize the media library for our social settings.
-initAdminMedia( jQuery );
 
 // STORE INIT
 // Register our store to WP data.
