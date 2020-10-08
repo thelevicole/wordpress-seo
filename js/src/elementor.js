@@ -1,6 +1,7 @@
 /* global jQuery */
 import domReady from "@wordpress/dom-ready";
 import ElementorEditorData from "./analysis/elementorEditorData";
+import initAnalysis from "./initializers/analysis";
 import initElementorEditorIntegration from "./initializers/elementor-editor-integration";
 import initEditorStore from "./initializers/editor-store";
 import initScraper from "./initializers/elementor-scraper";
@@ -22,6 +23,8 @@ domReady( () => {
 	window.editorData = editorData;
 
 	initL10n();
+	initAnalysis();
+
 	// Initialize the scraper.
 	initScraper( jQuery, store, editorData );
 
