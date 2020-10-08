@@ -40,12 +40,8 @@ import initializeUsedKeywords from "./used-keywords-assessment";
 import { setFocusKeyword } from "../redux/actions/focusKeyword";
 import { setMarkerStatus } from "../redux/actions/markerButtons";
 import { updateData } from "../redux/actions/snippetEditor";
-import { setWordPressSeoL10n, setYoastComponentsL10n } from "../helpers/i18n";
 import { setCornerstoneContent } from "../redux/actions/cornerstoneContent";
 import { refreshSnippetEditor } from "../redux/actions/snippetEditor.js";
-
-setYoastComponentsL10n();
-setWordPressSeoL10n();
 
 // Plugin class prototypes (not the instances) are being used by other plugins from the window.
 window.YoastReplaceVarPlugin = YoastReplaceVarPlugin;
@@ -77,10 +73,7 @@ export default function initPostScraper( $, store, editorData ) {
 	function getAppArgs( store ) {
 		const args = {
 			// ID's of elements that need to trigger updating the analyzer.
-			elementTarget: [
-//				"yoast_wpseo_focuskw",
-//				"yoast_wpseo_metadesc",
-			],
+			elementTarget: [],
 			targets: {
 				output: "does-not-really-exist-but-it-needs-something",
 				contentOutput: "also-does-not-really-exist-but-it-needs-something",
@@ -221,10 +214,6 @@ export default function initPostScraper( $, store, editorData ) {
 	 * @returns {void}
 	 */
 	function initializePostAnalysis() {
-		tinyMCEHelper.setStore( store );
-		tinyMCEHelper.wpTextViewOnInitCheck();
-		handlePageBuilderCompatibility();
-
 		const appArgs = getAppArgs( store );
 		app = new App( appArgs );
 
