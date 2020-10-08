@@ -1,9 +1,9 @@
 import {
 	UPDATE_EDITOR_DATA,
-	SET_CONTENT,
-	SET_TITLE,
-	SET_EXCERPT,
-	SET_SLUG,
+	SET_EDITOR_DATA_CONTENT,
+	SET_EDITOR_DATA_TITLE,
+	SET_EDITOR_DATA_EXCERPT,
+	SET_EDITOR_DATA_SLUG,
 } from "../actions/editorData";
 
 const INITIAL_STATE = {
@@ -22,36 +22,36 @@ const INITIAL_STATE = {
  *
  * @returns {Object} The new state.
  */
-function editorDataReducer( state = INITIAL_STATE, action ) {
+const editorDataReducer = ( state = INITIAL_STATE, action ) => {
 	switch ( action.type ) {
 		case UPDATE_EDITOR_DATA:
 			return {
 				...state,
 				...action.editorData,
 			};
-		case SET_CONTENT:
+		case SET_EDITOR_DATA_CONTENT:
 			return {
 				...state,
 				content: action.content,
 			};
-		case SET_TITLE:
+		case SET_EDITOR_DATA_TITLE:
 			return {
 				...state,
 				title: action.title,
 			};
-		case SET_EXCERPT:
+		case SET_EDITOR_DATA_EXCERPT:
 			return {
 				...state,
 				excerpt: action.excerpt,
 			};
-		case SET_SLUG:
+		case SET_EDITOR_DATA_SLUG:
 			return {
 				...state,
 				slug: action.slug,
 			};
 	}
 	return state;
-}
-
+};
 /* eslint-enable complexity */
+
 export default editorDataReducer;

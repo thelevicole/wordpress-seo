@@ -1,8 +1,8 @@
 export const UPDATE_EDITOR_DATA = "UPDATE_EDITOR_DATA";
-export const SET_CONTENT = "SET_CONTENT";
-export const SET_TITLE = "SET_TITLE";
-export const SET_EXCERPT = "SET_EXCERPT";
-export const SET_SLUG = "SET_SLUG";
+export const SET_EDITOR_DATA_CONTENT = "SET_EDITOR_DATA_CONTENT";
+export const SET_EDITOR_DATA_TITLE = "SET_EDITOR_DATA_TITLE";
+export const SET_EDITOR_DATA_EXCERPT = "SET_EDITOR_DATA_EXCERPT";
+export const SET_EDITOR_DATA_SLUG = "SET_EDITOR_DATA_SLUG";
 
 /**
  * Updates the editor data in redux.
@@ -25,9 +25,9 @@ export function updateEditorData( editorData ) {
  *
  * @returns {Object} An action for redux.
  */
-export function setContent( content ) {
+export function setEditorDataContent( content ) {
 	return {
-		type: SET_CONTENT,
+		type: SET_EDITOR_DATA_CONTENT,
 		content,
 	};
 }
@@ -39,9 +39,9 @@ export function setContent( content ) {
  *
  * @returns {Object} An action for redux.
  */
-export function setTitle( title ) {
+export function setEditorDataTitle( title ) {
 	return {
-		type: SET_TITLE,
+		type: SET_EDITOR_DATA_TITLE,
 		title,
 	};
 }
@@ -53,9 +53,9 @@ export function setTitle( title ) {
  *
  * @returns {Object} An action for redux.
  */
-export function setExcerpt( excerpt ) {
+export function setEditorDataExcerpt( excerpt ) {
 	return {
-		type: SET_EXCERPT,
+		type: SET_EDITOR_DATA_EXCERPT,
 		excerpt,
 	};
 }
@@ -67,9 +67,9 @@ export function setExcerpt( excerpt ) {
  *
  * @returns {Object} An action for redux.
  */
-export function setSlug( slug ) {
+export function setEditorDataSlug( slug ) {
 	return {
-		type: SET_SLUG,
+		type: SET_EDITOR_DATA_SLUG,
 		slug,
 	};
 }

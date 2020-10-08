@@ -14,3 +14,4 @@ export * from "./schemaTab";
 export * from "./cornerstoneContent";
 export * from "./SEMrushRequest";
 export * from "./SEMrushModal";
+export * from "./editorData";
